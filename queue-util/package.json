@@ -8,10 +8,6 @@
   },
   "main": "queue-util.js",
   "dependencies": {
-    "json-stringify-safe": "~5.0.0",
-    "string": "^2.2.0",
-    "util": "^0.10.3",
-    "joi": "^5.0.2",
     "amqp": "0.2.0"
   },
   "scripts": {
