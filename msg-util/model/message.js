@@ -48,6 +48,6 @@ module.exports = function(options) {
       }
     };
     self.getMsg  = function() { return safeStringify(self._msg); };
-    self.isValid = function() { return (Joi.validate(self.getMsg(),schema).error === null) ? true:false; };
+    self.isValid = function() { return (Joi.validate(self.getMsg(), schema).error === null) ? true : false; };
     self.getJSON = function() { return self._msg; };
 };
