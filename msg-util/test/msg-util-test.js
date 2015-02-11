@@ -35,7 +35,8 @@ describe("Message", function() {
           level: 'info',
           target: 'myfoo'
         },
-        origin: 'util'
+        origin: 'util',
+        time_stamp: new Date().toISOString()
       };
       var payload = msg.getJSON(options);
       console.log(payload);
@@ -56,7 +57,49 @@ describe("Message", function() {
           level: 'info',
           target: 'myfoo'
         },
-        origin: 'util'
+        origin: 'util',
+        time_stamp: new Date().toISOString()
+      };
+      test.assert.equal(msg.isValid(options),false);
+    });
+
+    it("validate actual datetime", function() {
+
+      var options = {
+        ctx: 'project.create.foo',
+        name: 'wenlock',
+        desc: 'my project',
+        user: 'wenlock@hp.com',
+        role: 'admin',
+        debug: true,
+        log: {
+          enable: true,
+          level: 'info',
+          target: 'myfoo'
+        },
+        origin: 'util',
+        id: '19m',
+        time_stamp: new Date().toISOString()
+      };
+      test.assert.equal(msg.isValid(options),true);
+    });
+    
+    it("missing time_stamp", function() {
+
+      var options = {
+        ctx: 'project.create.foo',
+        name: 'wenlock',
+        desc: 'my project',
+        user: 'wenlock@hp.com',
+        role: 'admin',
+        debug: true,
+        log: {
+          enable: true,
+          level: 'info',
+          target: 'myfoo'
+        },
+        origin: 'util',
+        id: '19m'
       };
       test.assert.equal(msg.isValid(options),false);
     });

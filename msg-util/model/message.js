@@ -44,7 +44,8 @@ module.exports = function(options) {
           target: options.log.target
         },
         origin: options.origin,
-        site_id: options.id
+        site_id: options.id,
+        time_stamp: options.time_stamp
       }
     };
     self.getMsg  = function() { return safeStringify(self._msg); };

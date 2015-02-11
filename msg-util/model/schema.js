@@ -41,7 +41,8 @@ var schema = {
       target: Joi.string().allow('')
     },
     origin: Joi.string(),
-    site_id: Joi.string().alphanum().required()
+    site_id: Joi.string().alphanum().required(),
+    time_stamp: Joi.date().iso().required()
   }
 };
 
