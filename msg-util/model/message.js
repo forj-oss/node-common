@@ -23,32 +23,26 @@ var safeStringify = helpers.safeStringify;
 
 module.exports = function(options) {
     var self  = this;
-    self._msg =
-    {
-      message: {
-        action: {
-          context : options.ctx,
-          ctx_data: {
-            name : options.name,
-            description: options.desc
-          }
-        },
-        ACL: {
-          user: options.user,
-          role: options.role
-        },
-        debug: options.debug,
-        log: {
-          enable: options.log.enable,
-          level: options.log.level,
-          target: options.log.target
-        },
-        origin: options.origin,
-        site_id: options.id,
-        time_stamp: options.time_stamp
-      }
+    self._msg = options;
+
+
+    self.getMsg  = function() { 
+      return safeStringify(self._msg); 
     };
-    self.getMsg  = function() { return safeStringify(self._msg); };
-    self.isValid = function() { return (Joi.validate(self.getMsg(), schema).error === null) ? true : false; };
-    self.getJSON = function() { return self._msg; };
+
+
+    self.isValid = function(callback) {
+      Joi.validate(self.getMsg(), schema, function (error, value) {
+        if (error){
+          callback(error, value);
+        }else {
+          callback(null, value); // Success
+        }
+      });
+    };
+
+
+    self.getJSON = function() { 
+      return self._msg; 
+    };
 };

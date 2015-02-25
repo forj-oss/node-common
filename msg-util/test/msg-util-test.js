@@ -16,92 +16,132 @@
 'use strict';
 
 var msg = require('../msg-util.js').Message;
-var test = require('unit.js');
+var should = require('chai').should();
 
-describe("Message", function() {
-  describe("valid message payload", function() {
-    it("should match action context", function() {
 
-      var options = {
-        ctx: 'project.create.foo',
-        name: 'wenlock',
-        desc: 'my project',
-        id: '19m',
-        user: 'wenlock@hp.com',
-        role: 'admin',
+describe("# Message", function() {
+
+  it("should create a valid message", function(done) {
+    var options = {
+      message: {  
+        action: {
+          context : 'project.create.foo',
+          ctx_data: {
+            name : 'project foo',
+            description: 'foo project'
+          }
+        },
+        ACL: {
+          user: 'wenlock@hp.com',
+          role: 'admin'
+        },
         debug: true,
         log: {
           enable: true,
-          level: 'info',
-          target: 'myfoo'
+            level: 'info',
+            target: 'myfoo'
+          },
+        origin: 'util',
+        site_id: '19m',
+        time_stamp: new Date().toISOString()
+      }
+    };
+    msg.isValid(options, function (error){
+        should.exist(error);
+        done();
+      });
+  });
+
+
+  it("should validate missing site_id", function(done) {
+    var options = {
+      message: {  
+        action: {
+          context : 'project.create.foo',
+          ctx_data: {
+            name : 'project foo',
+            description: 'foo project'
+          }
         },
+        ACL: {
+          user: 'wenlock@hp.com',
+          role: 'admin'
+        },
+        debug: true,
+        log: {
+          enable: true,
+            level: 'info',
+            target: 'myfoo'
+          },
         origin: 'util',
         time_stamp: new Date().toISOString()
-      };
-      var payload = msg.getJSON(options);
-      console.log(payload);
-      test.assert.equal(payload.message.action.context,options.ctx);
+      }
+    };
+    msg.isValid(options, function (error){
+      should.exist(error);
+      done();
     });
+  });
 
-    it("missing site_id", function() {
 
-      var options = {
-        ctx: 'project.create.foo',
-        name: 'wenlock',
-        desc: 'my project',
-        user: 'wenlock@hp.com',
-        role: 'admin',
+  it("should validate datetime", function(done) {
+    var options = {
+        message: {  
+          action: {
+            context : 'project.create.foo',
+            ctx_data: {
+              name : 'project foo',
+              description: 'foo project'
+            }
+          },
+          ACL: {
+            user: 'wenlock@hp.com',
+            role: 'admin'
+          },
+          debug: true,
+          log: {
+            enable: true,
+              level: 'info',
+              target: 'myfoo'
+            },
+          origin: 'util',
+          time_stamp: 'THIS IS NOT A DATE'
+        }
+      };
+    msg.isValid(options, function (error){
+      should.exist(error);
+      done();
+    });
+  });
+
+
+  it("should validate missing time_stamp", function(done) {
+    var options = {
+      message: {  
+        action: {
+          context : 'project.create.foo',
+          ctx_data: {
+            name : 'project foo',
+            description: 'foo project'
+          }
+        },
+        ACL: {
+          user: 'wenlock@hp.com',
+          role: 'admin'
+        },
         debug: true,
         log: {
           enable: true,
-          level: 'info',
-          target: 'myfoo'
-        },
+            level: 'info',
+            target: 'myfoo'
+          },
         origin: 'util',
-        time_stamp: new Date().toISOString()
-      };
-      test.assert.equal(msg.isValid(options),false);
-    });
-
-    it("validate actual datetime", function() {
-
-      var options = {
-        ctx: 'project.create.foo',
-        name: 'wenlock',
-        desc: 'my project',
-        user: 'wenlock@hp.com',
-        role: 'admin',
-        debug: true,
-        log: {
-          enable: true,
-          level: 'info',
-          target: 'myfoo'
-        },
-        origin: 'util',
-        id: '19m',
-        time_stamp: new Date().toISOString()
-      };
-      test.assert.equal(msg.isValid(options),true);
-    });
-    
-    it("missing time_stamp", function() {
-
-      var options = {
-        ctx: 'project.create.foo',
-        name: 'wenlock',
-        desc: 'my project',
-        user: 'wenlock@hp.com',
-        role: 'admin',
-        debug: true,
-        log: {
-          enable: true,
-          level: 'info',
-          target: 'myfoo'
-        },
-        origin: 'util',
-        id: '19m'
-      };
-      test.assert.equal(msg.isValid(options),false);
+        site_id: '19m'
+      }
+    };
+    msg.isValid(options, function (error){
+      should.exist(error);
+      done();
     });
   });
 });

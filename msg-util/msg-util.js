@@ -27,31 +27,31 @@ var Message = function Message() {};
  Create a stringified json message
 */
 Message.prototype.createMessage = function(options) {
-
   var msg =  new Msg(options);
   return msg.getMsg();
-
 };
 
 /**
  Create a JSON message
 */
 Message.prototype.getJSON = function(options) {
-
   var msg =  new Msg(options);
   return msg.getJSON();
-
 };
 
 /**
  Validates if message meets schema
  returns: true or false
 */
-Message.prototype.isValid = function(options) {
-
+Message.prototype.isValid = function(options, callback) {
   var msg =  new Msg(options);
-  return msg.isValid();
-
+  msg.isValid( function (error){
+    if (error){
+      callback(error); 
+    }else {
+      callback(null); // Success
+    }
+  });
 };
 
 //exports
